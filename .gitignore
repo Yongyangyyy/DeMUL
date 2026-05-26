@@ -25,6 +25,7 @@ ENV/
 # Training outputs
 results/
 *.ckpt
+!checkpoints/**/*.ckpt
 *.pth
 tensorboard_log/
 

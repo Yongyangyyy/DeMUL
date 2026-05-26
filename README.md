@@ -119,6 +119,51 @@ Each dataset config uses paths relative to `root_path` for annotations, LMDB fea
 
 ---
 
+## Model Zoo
+
+We release pre-trained checkpoints on TVR and DiDeMo. Metrics are reported on the **validation** split with NMS threshold 0.7.
+
+| Dataset | VCMR R@1<br/>(IoU=0.7) | VCMR R@5<br/>(IoU=0.7) | SVMR R@1<br/>(IoU=0.7) | VR R@1 | Download |
+|:-------:|:----------------------:|:----------------------:|:----------------------:|:------:|:--------:|
+| TVR | 11.89 | 24.81 | 26.88 | 29.01 | [model.ckpt](checkpoints/demul_tvr/model.ckpt) |
+| DiDeMo | 3.92 | 9.33 | 34.62 | 7.02 | [model.ckpt](checkpoints/demul_didemo/model.ckpt) |
+
+> Full metrics and training configs are bundled in each checkpoint folder under [`checkpoints/`](checkpoints/).
+
+### Download
+
+**Option 1 — script**
+
+```bash
+bash scripts/download_weights.sh        # download both
+bash scripts/download_weights.sh tvr    # TVR only
+bash scripts/download_weights.sh didemo # DiDeMo only
+```
+
+**Option 2 — manual**
+
+```bash
+# TVR
+wget https://github.com/Yongyangyyy/DeMUL/raw/main/checkpoints/demul_tvr/model.ckpt \
+     -P checkpoints/demul_tvr/
+
+# DiDeMo
+wget https://github.com/Yongyangyyy/DeMUL/raw/main/checkpoints/demul_didemo/model.ckpt \
+     -P checkpoints/demul_didemo/
+```
+
+### Inference with Pre-trained Weights
+
+```bash
+# TVR validation
+bash scripts/inference.sh checkpoints/demul_tvr val
+
+# DiDeMo validation
+bash scripts/inference.sh checkpoints/demul_didemo val
+```
+
+---
+
 ## Training
 
 ### TVR

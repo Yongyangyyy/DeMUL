@@ -85,12 +85,53 @@ Input: (query, visual clips, subtitle clips)
 
 ---
 
-## Installation
+## Getting Started
+
+### 1. Clone this repository
 
 ```bash
 git clone https://github.com/Yongyangyyy/DeMUL.git
 cd DeMUL
+```
 
+### 2. Prepare feature files and data
+
+We use the same pre-extracted features as [CONQUER](https://github.com/houzhijian/CONQUER). Please refer to their data preparation instructions.
+
+#### TVR
+
+Download [tvr_feature_release.tar.gz](https://drive.google.com/file/d/1DFnMNH-oi6-cZbl1coXqa_KjtsIsObxG/view?usp=sharing) (21GB). After downloading, extract it to **YOUR DATA STORAGE** directory:
+
+```bash
+tar zxvf path/to/tvr_feature_release.tar.gz
+```
+
+You should see `tvr_feature_release` under **YOUR DATA STORAGE** directory. It contains:
+
+- **Visual features** (ResNet + SlowFast) from [HERO](https://github.com/linjieli222/HERO/)
+- **Text features** (subtitle and query, fine-tuned RoBERTa) from [XML / TVRetrieval](https://github.com/jayleicn/TVRetrieval)
+
+For details on feature extraction, see [visual feature extraction](https://github.com/linjieli222/HERO_Video_Feature_Extractor) and [text feature extraction](https://github.com/jayleicn/TVRetrieval/tree/master/utils/text_feature).
+
+Then modify `root_path` in `config/tvr_data_config.json`:
+
+```json
+"root_path": "/path/to/tvr_feature_release"
+```
+
+#### DiDeMo
+
+DiDeMo features follow the same CONQUER-compatible directory layout. Prepare `didemo_feature_release` with the same visual / text feature format, then set `root_path` in `config/didemo_data_config.json`:
+
+```json
+"root_path": "/path/to/didemo_feature_release"
+```
+
+All paths in the dataset configs are relative to `root_path` (annotations, LMDB features, VR rank lists, etc.).
+
+### 3. Install dependencies
+
+```bash
 # Option 1: pip
 pip install -r requirements.txt
 
@@ -102,22 +143,6 @@ pip install -r requirements.txt
 ```
 
 Key dependencies: `torch>=2.0`, `tensorboard`, `lmdb`, `msgpack`, `msgpack-numpy`, `easydict`, `tqdm`.
-
----
-
-## Data Preparation
-
-This repo expects pre-extracted features in the same format as the [DeMUL/DeMA feature release](https://github.com/Yongyangyyy/DeMUL). After downloading the features, update `root_path` in the dataset config:
-
-```bash
-# TVR
-vim config/tvr_data_config.json   # set "root_path" to your feature directory
-
-# DiDeMo
-vim config/didemo_data_config.json
-```
-
-Each dataset config uses paths relative to `root_path` for annotations, LMDB features, and VR rank lists.
 
 ---
 
@@ -222,4 +247,17 @@ If you find this code useful, please cite:
 
 ## Acknowledgements
 
-This implementation builds upon ideas and data pipelines from prior VCMR works including [MINUTE](https://arxiv.org/abs/2301.13606) and [PREM](https://arxiv.org/abs/2402.13576).
+This codebase is built upon [CONQUER](https://github.com/houzhijian/CONQUER) and modified for DeMUL. We thank the CONQUER authors for open-sourcing their implementation.
+
+If you use the data pipeline or evaluation protocol, please also cite CONQUER:
+
+```bibtex
+@inproceedings{hou2020conquer,
+  title={CONQUER: Contextual Query-aware Ranking for Video Corpus Moment Retrieval},
+  author={Hou, Zhijian and Ngo, Chong-Wah and Chan, Wing-Kwong},
+  booktitle={Proceedings of the 29th ACM International Conference on Multimedia},
+  year={2021}
+}
+```
+
+We also thank the authors of [TVRetrieval](https://github.com/jayleicn/TVRetrieval), [HERO](https://github.com/linjieli222/HERO/), [MINUTE](https://arxiv.org/abs/2301.13606), and [PREM](https://arxiv.org/abs/2402.13576) for their open-source contributions to VCMR research.

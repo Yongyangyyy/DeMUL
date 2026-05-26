@@ -1,0 +1,13 @@
+torch>=2.0
+tensorboard
+lmdb
+msgpack
+msgpack-numpy
+easydict
+tqdm
+numpy
+scipy
+scikit-learn
+pandas
+tabulate
+terminaltables

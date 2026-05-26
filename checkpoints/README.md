@@ -1,11 +1,10 @@
 # Pre-trained Checkpoints
 
-Official DeMUL weights trained on TVR and DiDeMo validation splits.
+Official DeMUL TVR checkpoint (validation split, seed=2012).
 
-| Dataset | Checkpoint | Config | Metrics |
-|---------|------------|--------|---------|
-| TVR | [demul_tvr/model.ckpt](demul_tvr/model.ckpt) | [opt.json](demul_tvr/opt.json) | [metrics.json](demul_tvr/metrics.json) |
-| DiDeMo | [demul_didemo/model.ckpt](demul_didemo/model.ckpt) | [opt.json](demul_didemo/opt.json) | [metrics.json](demul_didemo/metrics.json) |
+| Checkpoint | Config | Metrics |
+|------------|--------|---------|
+| [demul_tvr/model.ckpt](demul_tvr/model.ckpt) | [opt.json](demul_tvr/opt.json) | [metrics.json](demul_tvr/metrics.json) |
 
 Each folder contains:
 - `model.ckpt` — model weights (~65 MB)
@@ -15,11 +14,7 @@ Each folder contains:
 ## Quick Use
 
 ```bash
-# TVR
 bash scripts/inference.sh checkpoints/demul_tvr val
-
-# DiDeMo
-bash scripts/inference.sh checkpoints/demul_didemo val
 ```
 
 Or download via script:

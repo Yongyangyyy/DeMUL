@@ -1,35 +1,17 @@
 #!/usr/bin/env bash
-# Download pre-trained DeMUL checkpoints from GitHub.
-# Usage: bash scripts/download_weights.sh [tvr|didemo|all]
+# Download the pre-trained TVR checkpoint from GitHub.
+# Usage: bash scripts/download_weights.sh
 
 set -euo pipefail
 
 REPO="https://github.com/Yongyangyyy/DeMUL"
 BRANCH="main"
-TARGET=${1:-"all"}
+DIR="checkpoints/demul_tvr"
 
-download_one() {
-  local name=$1
-  local dir="checkpoints/${name}"
-  mkdir -p "${dir}"
-  echo "Downloading ${name} checkpoint..."
-  curl -L "${REPO}/raw/${BRANCH}/${dir}/model.ckpt" -o "${dir}/model.ckpt"
-  curl -L "${REPO}/raw/${BRANCH}/${dir}/opt.json" -o "${dir}/opt.json"
-  curl -L "${REPO}/raw/${BRANCH}/${dir}/metrics.json" -o "${dir}/metrics.json"
-  echo "Saved to ${dir}/"
-}
-
-case "${TARGET}" in
-  tvr)    download_one demul_tvr ;;
-  didemo) download_one demul_didemo ;;
-  all)
-    download_one demul_tvr
-    download_one demul_didemo
-    ;;
-  *)
-    echo "Usage: bash scripts/download_weights.sh [tvr|didemo|all]"
-    exit 1
-    ;;
-esac
-
+mkdir -p "${DIR}"
+echo "Downloading TVR checkpoint..."
+curl -L "${REPO}/raw/${BRANCH}/${DIR}/model.ckpt" -o "${DIR}/model.ckpt"
+curl -L "${REPO}/raw/${BRANCH}/${DIR}/opt.json" -o "${DIR}/opt.json"
+curl -L "${REPO}/raw/${BRANCH}/${DIR}/metrics.json" -o "${DIR}/metrics.json"
+echo "Saved to ${DIR}/"
 echo "Done."

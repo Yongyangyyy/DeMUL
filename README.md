@@ -2,6 +2,17 @@
 
 Official implementation of **Video Corpus Moment Retrieval via Decoupled Multimodal Modeling and Unified Localization**.
 
+DeMUL is a clean, minimal re-implementation that keeps only the core DeMUL model and removes experimental / alternative modules from the research codebase.
+
+---
+
+## Highlights
+
+- **Decoupled multimodal encoding**: separate visual and subtitle encoders with cross-modal attention from the query
+- **Query-driven fusion**: NetVLAD-based modality weighting with missing-modality fallback
+- **Unified localization**: shared moment localization head for VCMR / SVMR / VR tasks
+- **Supported datasets**: [TVR](https://github.com/jayleicn/TVRetrieval) and [DiDeMo](https://github.com/LisaAnne/LocalizingMoments)
+
 ---
 
 ## Project Structure
@@ -28,11 +39,51 @@ DeMUL/
 │   └── eval.py
 ├── train.py
 ├── inference.py
+├── checkpoints/         # pre-trained weights (TVR & DiDeMo)
 └── scripts/
     ├── train_tvr.sh
     ├── train_didemo.sh
-    └── inference.sh
+    ├── inference.sh
+    └── download_weights.sh
 ```
+
+---
+
+## Model Architecture
+
+```
+Input: (query, visual clips, subtitle clips)
+          │
+          ▼
+  BidVideoQueryEncoder
+  ┌──────────────────────────────────────────────────────────┐
+  │  Linear projection  (visual 4352→384, sub 768→384,       │
+  │                       query 768→384)                     │
+  │  + position & token-type embeddings                      │
+  │                                                          │
+  │  queryEncoder   : TransformerBlock (full self-attn)      │
+  │  visualEncoder  : TransformerBlock (win-5 self-attn       │
+  │                     + cross-modal attn from query)       │
+  │  textEncoder    : TransformerBlock (same as visual)      │
+  └──────────────────────────────────────────────────────────┘
+          │
+          ▼
+  QueryWeightEncoder  (NetVLAD → sigmoid → per-modality weights)
+          │
+          ▼
+  Contextual QDF Refinement  (2 × TransformerBlock, win-5 + cross-modal)
+          │
+          ▼
+  MoE Weighted Fusion  +  missing-modality fallback
+          │
+          ▼
+  MomentLocalizationHead  (BiGRU × 2 + ConvSE × 2)
+          │
+          ▼
+  start / end score distributions  →  Cross-Entropy loss
+```
+
+---
 
 ## Installation
 
@@ -163,5 +214,20 @@ This project is released under the [MIT License](LICENSE).
 
 ---
 
+## Citation
+
+If you find this code useful, please cite:
+
+```bibtex
+@article{demul2026,
+  title={Video Corpus Moment Retrieval via Decoupled Multimodal Modeling and Unified Localization},
+  author={Yang, Yongyang},
+  year={2026}
+}
+```
+
+---
+
 ## Acknowledgements
 
+This implementation builds upon ideas and data pipelines from prior VCMR works including [MINUTE](https://arxiv.org/abs/2301.13606) and [PREM](https://arxiv.org/abs/2402.13576).

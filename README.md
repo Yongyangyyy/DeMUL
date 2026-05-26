@@ -2,17 +2,6 @@
 
 Official implementation of **Video Corpus Moment Retrieval via Decoupled Multimodal Modeling and Unified Localization**.
 
-DeMUL is a clean, minimal re-implementation that keeps only the core DeMUL model and removes experimental / alternative modules from the research codebase.
-
----
-
-## Highlights
-
-- **Decoupled multimodal encoding**: separate visual and subtitle encoders with cross-modal attention from the query
-- **Query-driven fusion**: NetVLAD-based modality weighting with missing-modality fallback
-- **Unified localization**: shared moment localization head for VCMR / SVMR / VR tasks
-- **Supported datasets**: [TVR](https://github.com/jayleicn/TVRetrieval) and [DiDeMo](https://github.com/LisaAnne/LocalizingMoments)
-
 ---
 
 ## Project Structure
